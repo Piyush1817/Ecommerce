@@ -2,6 +2,7 @@ package com.ecommerce.backend.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend.dto.UserDTO;
@@ -13,13 +14,18 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    
+private final BCryptPasswordEncoder passwordEncoder;
 
+public UserService(UserRepository userRepository,
+                   BCryptPasswordEncoder passwordEncoder) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+}
     public User createUser(User user) {
-        return userRepository.save(user);
-    }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    return userRepository.save(user);
+}
 
     public List<UserDTO> getAllUsers() {
     List<User> users = userRepository.findAll();
@@ -32,5 +38,6 @@ public class UserService {
         )
     ).toList();
 }
+
     
 }
