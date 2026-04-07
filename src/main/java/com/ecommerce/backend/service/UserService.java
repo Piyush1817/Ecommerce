@@ -1,10 +1,12 @@
 package com.ecommerce.backend.service;
 
-import com.ecommerce.backend.entity.User;
-import com.ecommerce.backend.repository.UserRepository;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.ecommerce.backend.dto.UserDTO;
+import com.ecommerce.backend.entity.User;
+import com.ecommerce.backend.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -19,7 +21,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+    public List<UserDTO> getAllUsers() {
+    List<User> users = userRepository.findAll();
+
+    return users.stream().map(user ->
+        new UserDTO(
+            user.getId(),
+            user.getName(),
+            user.getEmail()
+        )
+    ).toList();
+}
+    
 }
