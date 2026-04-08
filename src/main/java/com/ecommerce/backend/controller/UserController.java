@@ -31,4 +31,8 @@ public class UserController {
 public List<UserDTO> getAllUsers() {
     return userService.getAllUsers();
 }
+@PostMapping("/login")
+    public String login(@RequestBody User user) {
+        return userService.login(user.getEmail(), user.getPassword());
+    }
 }

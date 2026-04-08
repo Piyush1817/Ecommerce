@@ -38,6 +38,25 @@ public UserService(UserRepository userRepository,
         )
     ).toList();
 }
+public String login(String email,String password){
+    User user= userRepository.findByEmail(email);
+
+    if(user==null){
+        return "User not found";
+
+
+    }
+
+    if(password==null){
+        return "password is null";
+    }
+    if(passwordEncoder.matches(password,user.getPassword())){
+        return "Login successful";
+
+    } else {
+        return "Invalid credentials";
+    }
+}
 
     
 }
