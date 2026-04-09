@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ecommerce.backend.dto.UserDTO;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.repository.UserRepository;
+import com.ecommerce.backend.util.JwtUtil;
 
 @Service
 public class UserService {
@@ -39,22 +40,16 @@ public UserService(UserRepository userRepository,
     ).toList();
 }
 public String login(String email,String password){
-    User user= userRepository.findByEmail(email);
+    User user = userRepository.findByEmail(email);
 
-    if(user==null){
+    if (user == null) {
         return "User not found";
-
-
     }
 
-    if(password==null){
-        return "password is null";
-    }
-    if(passwordEncoder.matches(password,user.getPassword())){
-        return "Login successful";
-
+    if (passwordEncoder.matches(password, user.getPassword())) {
+        return JwtUtil.generateToken(user.getEmail()); // 🔥 CHANGE HERE
     } else {
-        return "Invalid credentials";
+        return "Invalid password";
     }
 }
 
