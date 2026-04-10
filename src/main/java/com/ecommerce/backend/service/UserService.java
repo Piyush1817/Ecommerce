@@ -1,6 +1,7 @@
 package com.ecommerce.backend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,14 @@ public UserService(UserRepository userRepository,
     this.passwordEncoder = passwordEncoder;
 }
     public User createUser(User user) {
+
+    if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        throw new RuntimeException("Email already exists");
+    }
+
     user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setRole("USER");
+
     return userRepository.save(user);
 }
 
@@ -39,19 +47,22 @@ public UserService(UserRepository userRepository,
         )
     ).toList();
 }
-public String login(String email,String password){
-    User user = userRepository.findByEmail(email);
+public String login(String email, String password) {
+    Optional<User> userOptional = userRepository.findByEmail(email);
 
-    if (user == null) {
+    // ✅ Check if user exists
+    if (userOptional.isEmpty()) {
         return "User not found";
     }
 
+    User user = userOptional.get();
+
+    // ✅ Check password
     if (passwordEncoder.matches(password, user.getPassword())) {
-        return JwtUtil.generateToken(user.getEmail()); // 🔥 CHANGE HERE
+        return JwtUtil.generateToken(user.getEmail()); // 🔥 pass user object
     } else {
         return "Invalid password";
     }
 }
-
     
 }

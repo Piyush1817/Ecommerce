@@ -31,10 +31,12 @@ public class JwtFilter implements Filter {
         System.out.println("Auth Header: " + authHeader);
 
         // 🔐 Allow login without token
-        if (req.getRequestURI().contains("/login")) {
-            chain.doFilter(request, response);
-            return;
-        }
+       if (req.getRequestURI().contains("/login") || 
+    (req.getRequestURI().contains("/users") && req.getMethod().equals("POST"))) {
+
+    chain.doFilter(request, response);
+    return;
+}
 
         // ❌ No token
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
