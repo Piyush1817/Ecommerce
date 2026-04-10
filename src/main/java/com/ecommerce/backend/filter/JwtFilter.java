@@ -1,7 +1,10 @@
 package com.ecommerce.backend.filter;
 
 import java.io.IOException;
+import java.util.Collections;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.ecommerce.backend.util.JwtUtil;
@@ -39,18 +42,24 @@ public class JwtFilter implements Filter {
             res.getWriter().write("Missing or invalid token");
             return;
         }
+                try {
+    String token = authHeader.substring(7);
+    String email = JwtUtil.extractEmail(token);
 
-        try {
-            String token = authHeader.substring(7);
-            String email = JwtUtil.extractEmail(token);
+    System.out.println("Authenticated user: " + email);
 
-            System.out.println("Authenticated user: " + email);
+    // 🔥 Create authentication object
+    UsernamePasswordAuthenticationToken auth =
+            new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
 
-        } catch (Exception e) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            res.getWriter().write("Invalid token");
-            return;
-        }
+    // 🔥 Set into Security Context
+    SecurityContextHolder.getContext().setAuthentication(auth);
+
+} catch (Exception e) {
+    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    res.getWriter().write("Invalid token");
+    return;
+}
 
         // ✅ Continue if valid
         chain.doFilter(request, response);
