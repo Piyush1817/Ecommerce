@@ -40,4 +40,14 @@ public List<UserDTO> getAllUsers() {
 public String getLoggedInUser() {
     return SecurityContextHolder.getContext().getAuthentication().getName();
 }
+
+@GetMapping("/admin")
+public String adminAccess() {
+    return "Welcome Admin!";
+}
+
+@GetMapping("/user")
+public String userAccess() {
+    return "Welcome User!";
+}
 }

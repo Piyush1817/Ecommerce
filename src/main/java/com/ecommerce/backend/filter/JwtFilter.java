@@ -1,9 +1,10 @@
 package com.ecommerce.backend.filter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,6 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 @Component
 public class JwtFilter implements Filter {
 
@@ -47,13 +47,25 @@ public class JwtFilter implements Filter {
                 try {
     String token = authHeader.substring(7);
     String email = JwtUtil.extractEmail(token);
+    String role = JwtUtil.extractRole(token);
+
+    UsernamePasswordAuthenticationToken auth =
+        new UsernamePasswordAuthenticationToken(
+                email,
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+        );
+    if(req.getRequestURI().contains("/admin") && !role.equals("ADMIN")) {
+        res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        res.getWriter().write("Access denied");
+        return;
+    }
 
     System.out.println("Authenticated user: " + email);
+    System.out.println("User role: " + role);
 
     // 🔥 Create authentication object
-    UsernamePasswordAuthenticationToken auth =
-            new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
-
+   
     // 🔥 Set into Security Context
     SecurityContextHolder.getContext().setAuthentication(auth);
 
@@ -65,5 +77,6 @@ public class JwtFilter implements Filter {
 
         // ✅ Continue if valid
         chain.doFilter(request, response);
+
     }
 }

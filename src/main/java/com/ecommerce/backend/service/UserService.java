@@ -58,9 +58,13 @@ public String login(String email, String password) {
     User user = userOptional.get();
 
     // ✅ Check password
-    if (passwordEncoder.matches(password, user.getPassword())) {
-        return JwtUtil.generateToken(user.getEmail()); // 🔥 pass user object
-    } else {
+     if (passwordEncoder.matches(password, user.getPassword())) {
+    return JwtUtil.generateToken(
+        user.getEmail(),
+        user.getRole()
+    );
+}
+    else {
         return "Invalid password";
     }
 }

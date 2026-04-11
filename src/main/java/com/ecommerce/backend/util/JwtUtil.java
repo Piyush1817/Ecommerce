@@ -3,6 +3,8 @@ package com.ecommerce.backend.util;
 import java.security.Key;
 import java.util.Date;
 
+import javax.crypto.SecretKey;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -10,47 +12,38 @@ import io.jsonwebtoken.security.Keys;
 public class JwtUtil {
 
     private static final String SECRET = "mysecretkeymysecretkeymysecretkey";
-    private static final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-//     public static String generateToken(User user) {
-//     Map<String, Object> claims = new HashMap<>();
-// claims.put("role", user.getRole());
-//         return Jwts.builder()
-//                 .setSubject(user.getEmail())
-//                 .setIssuedAt(new Date())
-//                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
-//                 .signWith(key)
-//                 .compact();
-//     }
-private static Key getSigningKey() {
-    return Keys.hmacShaKeyFor("mysecretkeymysecretkeymysecretkey".getBytes());
-}
-public static String generateToken(String email) {
-    return Jwts.builder()
-            .setSubject(email)
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
-            .signWith(getSigningKey())
-            .compact();
+    private static SecretKey getKey() {
+    return Keys.hmacShaKeyFor(SECRET.getBytes());
 }
 
-    public static String extractEmail(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+    // ✅ Generate Token
+    public static String generateToken(String email, String role) {
+        return Jwts.builder()
+                .subject(email)
+                .claim("role", role)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .signWith(getKey())
+                .compact();
     }
-   private static final String SECRET_KEY = "mysecretkeymysecretkeymysecretkey";
-   public static Claims extractAllClaims(String token) {
-    return Jwts.parser()
-            .setSigningKey(SECRET_KEY)
-            .parseClaimsJws(token)
-            .getBody();
-}
-public static String extractRole(String token) {
-    return extractAllClaims(token).get("role", String.class);
-}
-    
+
+    // ✅ Extract Email
+    public static String extractEmail(String token) {
+        return extractAllClaims(token).getSubject();
+    }
+
+    // ✅ Extract Role
+    public static String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
+    }
+
+    // ✅ Extract Claims
+      private static Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getKey())   // ✅ now works after chnaging  SecretKey
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
 }
