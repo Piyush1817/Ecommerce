@@ -16,27 +16,19 @@ public class Cart {
     private Long productId;
     private int quantity;
 
-    // 🔹 Default Constructor (IMPORTANT)
-    //
-    public Cart() {
-    }
+    // ✅ Default constructor (REQUIRED)
+    public Cart() {}
 
-    // 🔹 Parameterized Constructor (Optional)
-    public Cart(Long id, String userEmail, Long productId, int quantity) {
-        this.id = id;
+    // ✅ Parameterized constructor
+    public Cart(String userEmail, Long productId, int quantity) {
         this.userEmail = userEmail;
         this.productId = productId;
         this.quantity = quantity;
     }
 
-    // 🔹 Getters & Setters
-
+    // ✅ Getters and Setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUserEmail() {
