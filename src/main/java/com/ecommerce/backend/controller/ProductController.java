@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.backend.dto.ProductDTO;
 import com.ecommerce.backend.entity.Product;
 import com.ecommerce.backend.service.ProductService;
 
@@ -24,9 +25,27 @@ public class ProductController {
 
     // 🟢 ADMIN: Add product
     @PostMapping("/admin/products")
-    public Product addProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
-    }
+public ProductDTO addProduct(@RequestBody ProductDTO dto) {
+
+    Product product = new Product();
+
+    product.setName(dto.getName());
+    product.setDescription(dto.getDescription());
+    product.setPrice(dto.getPrice());
+    product.setQuantity(dto.getQuantity());
+
+    Product savedProduct = productService.addProduct(product);
+
+    ProductDTO response = new ProductDTO();
+
+    response.setId(savedProduct.getId());
+    response.setName(savedProduct.getName());
+    response.setDescription(savedProduct.getDescription());
+    response.setPrice(savedProduct.getPrice());
+    response.setQuantity(savedProduct.getQuantity());
+
+    return response;
+}
 
     // 🟢 USER: Get all products
     @GetMapping("/products")

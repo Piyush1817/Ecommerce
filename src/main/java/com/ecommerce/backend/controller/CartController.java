@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.backend.dto.CartDTO;
 import com.ecommerce.backend.entity.Cart;
 import com.ecommerce.backend.service.CartService;
+
 
 @RestController
 public class CartController {
@@ -24,17 +26,21 @@ public class CartController {
 
     // 🟢 USER: Add item to cart
     @PostMapping("/cart")
-    public Cart addToCart(@RequestBody Cart cart) {
-       // 🔐 Get email from JWT (not from request)
-    String email = SecurityContextHolder
+public Cart addToCart(@RequestBody CartDTO dto) {
+
+    String email = (String) SecurityContextHolder
             .getContext()
             .getAuthentication()
-            .getName();
+            .getPrincipal();
+
+    Cart cart = new Cart();
 
     cart.setUserEmail(email);
+    cart.setProductId(dto.getProductId());
+    cart.setQuantity(dto.getQuantity());
 
     return cartService.addToCart(cart);
-    }
+}
 
     // 🟢 USER: Get cart items
     @GetMapping("/cart")
