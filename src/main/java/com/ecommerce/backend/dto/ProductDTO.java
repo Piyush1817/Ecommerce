@@ -1,17 +1,30 @@
 package com.ecommerce.backend.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
 public class ProductDTO {
 
     private Long id;
+
+    @NotBlank(message = "Product name is required")
     private String name;
+
+    @NotBlank(message = "Description is required")
     private String description;
+
+    @Positive(message = "Price must be positive")
     private double price;
+
+    @Min(value = 0, message = "Quantity cannot be negative")
     private int quantity;
 
+    // ✅ Default Constructor
     public ProductDTO() {
     }
 
-    // Getters
+    // ✅ Getters
 
     public Long getId() {
         return id;
@@ -33,7 +46,7 @@ public class ProductDTO {
         return quantity;
     }
 
-    // Setters
+    // ✅ Setters
 
     public void setId(Long id) {
         this.id = id;

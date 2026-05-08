@@ -14,6 +14,8 @@ import com.ecommerce.backend.dto.ProductDTO;
 import com.ecommerce.backend.entity.Product;
 import com.ecommerce.backend.service.ProductService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class ProductController {
 
@@ -25,7 +27,7 @@ public class ProductController {
 
     // 🟢 ADMIN: Add product
     @PostMapping("/admin/products")
-public ProductDTO addProduct(@RequestBody ProductDTO dto) {
+public ProductDTO addProduct(@Valid  @RequestBody ProductDTO dto) {
 
     Product product = new Product();
 
@@ -73,3 +75,6 @@ public ProductDTO addProduct(@RequestBody ProductDTO dto) {
         return "Product deleted";
     }
 }
+
+
+//@valid is used to check validation rules before running controller method 
