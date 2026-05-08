@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.backend.dto.LoginRequest;
+import com.ecommerce.backend.dto.LoginResponse;
 import com.ecommerce.backend.dto.UserDTO;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.service.UserService;
@@ -33,9 +35,15 @@ public List<UserDTO> getAllUsers() {
     return userService.getAllUsers();
 }
 @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        return userService.login(user.getEmail(), user.getPassword());
-    }
+public LoginResponse login(@RequestBody LoginRequest request) {
+
+    String token = userService.login(
+            request.getEmail(),
+            request.getPassword()
+    );
+
+    return new LoginResponse(token);
+}
     @GetMapping("/me")
 public String getLoggedInUser() {
     return SecurityContextHolder.getContext().getAuthentication().getName();
