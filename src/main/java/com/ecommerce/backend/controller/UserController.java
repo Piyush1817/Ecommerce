@@ -26,10 +26,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
+    public UserDTO createUser(@RequestBody User user) {
 
+    User savedUser = userService.createUser(user);
+
+    UserDTO dto = new UserDTO();
+
+    dto.setId(savedUser.getId());
+    dto.setName(savedUser.getName());
+    dto.setEmail(savedUser.getEmail());
+    dto.setRole(savedUser.getRole());
+    
+
+    return dto;
+}
     @GetMapping
 public List<UserDTO> getAllUsers() {
     return userService.getAllUsers();
