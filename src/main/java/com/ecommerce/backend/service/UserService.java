@@ -36,16 +36,22 @@ public UserService(UserRepository userRepository,
     return userRepository.save(user);
 }
 
-    public List<UserDTO> getAllUsers() {
-    List<User> users = userRepository.findAll();
+   public List<UserDTO> getAllUsers() {
 
-    return users.stream().map(user ->
-        new UserDTO(
-            user.getId(),
-            user.getName(),
-            user.getEmail()
-        )
-    ).toList();
+    return userRepository.findAll()
+            .stream()
+            .map(user -> {
+
+                UserDTO dto = new UserDTO();
+
+                dto.setId(user.getId());
+                dto.setName(user.getName());
+                dto.setEmail(user.getEmail());
+                dto.setRole(user.getRole());
+
+                return dto;
+            })
+            .toList();
 }
 public String login(String email, String password) {
     Optional<User> userOptional = userRepository.findByEmail(email);
