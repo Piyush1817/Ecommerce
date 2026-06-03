@@ -20,11 +20,17 @@ public class ProductDTO {
     @Min(value = 0, message = "Quantity cannot be negative")
     private int quantity;
 
-    // ✅ Default Constructor
+    @NotBlank(message = "Category is required")
+    private String category;
+
+    @NotBlank(message = "Image URL is required")
+    private String imageUrl;
+
+    // Default Constructor
     public ProductDTO() {
     }
 
-    // ✅ Getters
+    // GETTERS
 
     public Long getId() {
         return id;
@@ -46,7 +52,15 @@ public class ProductDTO {
         return quantity;
     }
 
-    // ✅ Setters
+    public String getCategory() {
+        return category;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    // SETTERS
 
     public void setId(Long id) {
         this.id = id;
@@ -66,5 +80,13 @@ public class ProductDTO {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

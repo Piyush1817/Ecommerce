@@ -1,6 +1,7 @@
 package com.ecommerce.backend.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,56 +26,85 @@ public class ProductController {
         this.productService = productService;
     }
 
-    // 🟢 ADMIN: Add product
+    // ADMIN : Add Product
     @PostMapping("/admin/products")
-public ProductDTO addProduct(@Valid  @RequestBody ProductDTO dto) {
+    public ProductDTO addProduct(@Valid @RequestBody ProductDTO dto) {
 
-    Product product = new Product();
+        Product product = new Product();
 
-    product.setName(dto.getName());
-    product.setDescription(dto.getDescription());
-    product.setPrice(dto.getPrice());
-    product.setQuantity(dto.getQuantity());
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setQuantity(dto.getQuantity());
+        product.setCategory(dto.getCategory());
+        product.setImageUrl(dto.getImageUrl());
 
-    Product savedProduct = productService.addProduct(product);
+        Product savedProduct = productService.addProduct(product);
 
-    ProductDTO response = new ProductDTO();
+        return convertToDTO(savedProduct);
+    }
 
-    response.setId(savedProduct.getId());
-    response.setName(savedProduct.getName());
-    response.setDescription(savedProduct.getDescription());
-    response.setPrice(savedProduct.getPrice());
-    response.setQuantity(savedProduct.getQuantity());
-
-    return response;
-}
-
-    // 🟢 USER: Get all products
+    // USER : Get All Products
     @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public List<ProductDTO> getAllProducts() {
+
+        return productService.getAllProducts()
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-
-    // 🟢 USER: Get by ID
+    // USER : Get Product By Id
     @GetMapping("/products/{id}")
-    public Product getProduct(@PathVariable Long id) {
-        return productService.getProductById(id);
+    public ProductDTO getProduct(@PathVariable Long id) {
+
+        Product product = productService.getProductById(id);
+
+        return convertToDTO(product);
     }
 
-    // 🔴 ADMIN: Update
+    // ADMIN : Update Product
     @PutMapping("/admin/products/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        return productService.updateProduct(id, product);
+    public ProductDTO updateProduct(
+            @PathVariable Long id,
+            @Valid @RequestBody ProductDTO dto) {
+
+        Product product = new Product();
+
+        product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setQuantity(dto.getQuantity());
+        product.setCategory(dto.getCategory());
+        product.setImageUrl(dto.getImageUrl());
+
+        Product updatedProduct = productService.updateProduct(id, product);
+
+        return convertToDTO(updatedProduct);
     }
 
-    // 🔴 ADMIN: Delete
+    // ADMIN : Delete Product
     @DeleteMapping("/admin/products/{id}")
     public String deleteProduct(@PathVariable Long id) {
+
         productService.deleteProduct(id);
-        return "Product deleted";
+
+        return "Product deleted successfully";
+    }
+
+    // Helper Method
+    private ProductDTO convertToDTO(Product product) {
+
+        ProductDTO dto = new ProductDTO();
+
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setPrice(product.getPrice());
+        dto.setQuantity(product.getQuantity());
+        dto.setCategory(product.getCategory());
+        dto.setImageUrl(product.getImageUrl());
+
+        return dto;
     }
 }
-
-
-//@valid is used to check validation rules before running controller method 
