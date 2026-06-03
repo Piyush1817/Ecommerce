@@ -16,10 +16,17 @@ public class Product {
     private String description;
     private double price;
     private int quantity;
+
+    // NEW FIELDS
+    private String category;
+    private String imageUrl;
+  
+
     public Product() {
     }
 
-    // ✅ GETTERS
+    // GETTERS
+
     public Long getId() {
         return id;
     }
@@ -40,7 +47,16 @@ public class Product {
         return quantity;
     }
 
-    // ✅ SETTERS
+    public String getCategory() {
+        return category;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    // SETTERS
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -59,5 +75,13 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
