@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.backend.dto.ProductDTO;
@@ -53,6 +54,30 @@ public class ProductController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
+    // USER : Get Products by Category
+    @GetMapping("/products/category")
+public List<ProductDTO> getProductsByCategory(
+        @RequestParam String category) {
+
+    return productService.getProductsByCategory(category)
+            .stream()
+            .map(product -> {
+
+                ProductDTO dto = new ProductDTO();
+
+                dto.setId(product.getId());
+                dto.setName(product.getName());
+                dto.setDescription(product.getDescription());
+                dto.setPrice(product.getPrice());
+                dto.setQuantity(product.getQuantity());
+                dto.setCategory(product.getCategory());
+                dto.setImageUrl(product.getImageUrl());
+
+                return dto;
+            })
+            .toList();
+}
 
     // USER : Get Product By Id
     @GetMapping("/products/{id}")

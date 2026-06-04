@@ -38,6 +38,7 @@ public class JwtFilter implements Filter {
         // ✅ Public APIs
         if (uri.contains("/login")
                 || uri.contains("/register")
+                || uri.contains("/products")
                 || uri.contains("/swagger-ui")
                 || uri.contains("/v3/api-docs")) {
 
@@ -56,10 +57,13 @@ public class JwtFilter implements Filter {
         try {
 
             String token = authHeader.substring(7);
+            System.out.println("Token: " + token);
 
             String email = JwtUtil.extractEmail(token);
             String role = JwtUtil.extractRole(token);
 
+            System.out.println("Email: " + email);
+            System.out.println("Role: " + role);
 
 
             // ✅ Create authentication object
@@ -84,7 +88,7 @@ public class JwtFilter implements Filter {
             }
 
         } catch (Exception e) {
-
+              e.printStackTrace();
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             res.getWriter().write("Invalid token");
 
