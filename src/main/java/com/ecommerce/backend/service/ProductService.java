@@ -31,6 +31,12 @@ public class ProductService {
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory(category);
     }
+    // ✅ Search Products by Name
+    
+    public List<Product> searchProducts(String keyword) {
+        return productRepository.findByNameContainingIgnoreCase(keyword);
+    }
+    
     // ✅ Get Product by ID
     public Product getProductById(Long id) {
         return productRepository.findById(id)

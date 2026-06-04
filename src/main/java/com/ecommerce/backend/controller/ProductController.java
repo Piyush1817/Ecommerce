@@ -79,6 +79,17 @@ public List<ProductDTO> getProductsByCategory(
             .toList();
 }
 
+   // USER : Search Products
+@GetMapping("/products/search")
+public List<ProductDTO> searchProducts(
+        @RequestParam String keyword) {
+
+    return productService.searchProducts(keyword)
+            .stream()
+            .map(this::convertToDTO)
+            .toList();
+}
+
     // USER : Get Product By Id
     @GetMapping("/products/{id}")
     public ProductDTO getProduct(@PathVariable Long id) {
