@@ -3,6 +3,7 @@ package com.ecommerce.backend.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,6 +55,20 @@ public class ProductController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/products/paged")
+public Page<ProductDTO> getProductsPaged(
+
+        @RequestParam(defaultValue = "0") int page,
+
+        @RequestParam(defaultValue = "5") int size,
+
+        @RequestParam(defaultValue = "id") String sortBy) {
+
+    return productService
+            .getProducts(page, size, sortBy)
+            .map(this::convertToDTO);
+}
 
     // USER : Get Products by Category
     @GetMapping("/products/category")

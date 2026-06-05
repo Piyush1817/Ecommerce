@@ -2,6 +2,10 @@ package com.ecommerce.backend.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend.entity.Product;
@@ -42,6 +46,20 @@ public class ProductService {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
+    // pagination and sorting
+    public Page<Product> getProducts(
+        int page,
+        int size,
+        String sortBy) {
+
+    Pageable pageable =
+            PageRequest.of(
+                    page,
+                    size,
+                    Sort.by(sortBy));
+
+    return productRepository.findAll(pageable);
+}
 
     // ✅ Update Product
     public Product updateProduct(Long id, Product updatedProduct) {
