@@ -17,6 +17,7 @@ public class Order {
     private String userEmail;
     private Long productId;
     private int quantity;
+    private String status;
 
     // ✅ Default Constructor (required by JPA)
     public Order() {
@@ -46,7 +47,9 @@ public class Order {
     public int getQuantity() {
         return quantity;
     }
-
+    public String getStatus() {
+        return status;
+    }
     // ✅ Setters
 
     public void setId(Long id) {
@@ -63,5 +66,8 @@ public class Order {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+    public void setStatus(String status) {
+       this.status = status;
     }
 }

@@ -5,6 +5,7 @@ public class OrderDTO {
     private Long id;
     private Long productId;
     private int quantity;
+    private String status;
 
     public OrderDTO() {
     }
@@ -23,6 +24,10 @@ public class OrderDTO {
         return quantity;
     }
 
+     public String getStatus() {
+    return status;
+   }
+
     // Setters
 
     public void setId(Long id) {
@@ -36,4 +41,7 @@ public class OrderDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+    public void setStatus(String status) {
+    this.status = status;
+}
 }

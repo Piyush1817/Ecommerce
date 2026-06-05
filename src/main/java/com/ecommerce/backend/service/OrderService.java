@@ -59,6 +59,7 @@ public class OrderService {
             item.getProductId(),
             item.getQuantity()
         );
+            order.setStatus("PENDING");
 
          orderRepository.save(order);
      }
@@ -78,4 +79,26 @@ public class OrderService {
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+
+    public Order updateOrderStatus(Long id, String status) {
+
+    Order order = orderRepository.findById(id)
+            .orElseThrow(() ->
+                    new RuntimeException("Order not found"));
+
+      status = status.toUpperCase();
+
+if (!status.equals("PENDING")
+        && !status.equals("CONFIRMED")
+        && !status.equals("SHIPPED")
+        && !status.equals("DELIVERED")
+        && !status.equals("CANCELLED")) {
+
+    throw new RuntimeException("Invalid order status");
+}
+
+order.setStatus(status);
+
+    return orderRepository.save(order);
+  }
 }
