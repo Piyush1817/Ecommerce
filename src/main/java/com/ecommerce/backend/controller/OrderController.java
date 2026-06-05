@@ -22,14 +22,14 @@ public class OrderController {
     // 🟢 USER → PLACE ORDER
     @PostMapping("/order")
     public String placeOrder() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return orderService.placeOrder(email);
     }
 
     // 🟢 USER → VIEW OWN ORDERS
     @GetMapping("/orders")
     public List<Order> getUserOrders() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return orderService.getUserOrders(email);
     }
 
