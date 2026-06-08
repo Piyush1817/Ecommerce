@@ -56,17 +56,19 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/products/paged")
+   @GetMapping("/products/paged")
 public Page<ProductDTO> getProductsPaged(
 
         @RequestParam(defaultValue = "0") int page,
 
         @RequestParam(defaultValue = "5") int size,
 
-        @RequestParam(defaultValue = "id") String sortBy) {
+        @RequestParam(defaultValue = "id") String sortBy,
+
+        @RequestParam(defaultValue = "asc") String direction) {
 
     return productService
-            .getProducts(page, size, sortBy)
+            .getProducts(page, size, sortBy, direction)
             .map(this::convertToDTO);
 }
 
