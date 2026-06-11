@@ -61,7 +61,7 @@ public class ProductService {
             PageRequest.of(page, size, sort);
 
     return productRepository.findAll(pageable);
-}
+}                                                                                   
 
     // ✅ Update Product
     public Product updateProduct(Long id, Product updatedProduct) {
