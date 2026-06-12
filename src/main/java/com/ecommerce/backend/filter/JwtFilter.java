@@ -35,16 +35,23 @@ public class JwtFilter implements Filter {
        
         String uri = req.getRequestURI();
 
-        // ✅ Public APIs
-       if (uri.startsWith("/users/login")
+       // ✅ Public APIs
+        if (uri.startsWith("/users/login")
         || uri.startsWith("/users/register")
-        || uri.startsWith("/products")
+        || uri.equals("/products")
+        || uri.startsWith("/products/search")
+        || uri.startsWith("/products/category")
+        || uri.startsWith("/products/paged")
+        || uri.matches("/products/\\d+")
+        || (uri.matches("/products/\\d+/reviews")
+            && req.getMethod().equals("GET"))
+        || uri.matches("/products/\\d+/rating")
         || uri.startsWith("/swagger-ui")
         || uri.startsWith("/v3/api-docs")) {
 
-    chain.doFilter(request, response);
-    return;
-}
+         chain.doFilter(request, response);
+         return;
+           }
 
         // ✅ If token missing → continue
         // Spring Security will decide access

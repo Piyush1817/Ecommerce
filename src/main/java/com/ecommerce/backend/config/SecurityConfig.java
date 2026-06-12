@@ -46,8 +46,13 @@ public class SecurityConfig {
                     .requestMatchers(
                             "/users/login",
                             "/users/register",
-                              "/products",
-                             "/products/**",
+                            "/products",
+                            "/products/search",
+                            "/products/category",
+                            "/products/paged",
+                            "/products/*",
+                            "/products/*/reviews",
+                            "/products/*/rating",
                             "/swagger-ui/**",
                             "/v3/api-docs/**"
                     ).permitAll()
