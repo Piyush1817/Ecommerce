@@ -23,7 +23,7 @@ public class JwtFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request,
-                         ServletResponse response,
+                         ServletResponse response,  
                          FilterChain chain)
             throws IOException, ServletException {
 

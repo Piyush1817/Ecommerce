@@ -9,4 +9,8 @@ import com.ecommerce.backend.entity.Order;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByUserEmail(String userEmail);
+
+    long countByStatus(String status);
+
+    long count();
 }

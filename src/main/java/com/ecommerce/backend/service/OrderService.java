@@ -24,7 +24,7 @@ public class OrderService {
         this.productRepository = productRepository;
     }
 
-    // 🔥 PLACE ORDER
+    //PLACE ORDER
     public String placeOrder(String userEmail) {
 
         List<Cart> cartItems = cartRepository.findByUserEmail(userEmail);
@@ -70,16 +70,17 @@ public class OrderService {
         return "Order placed successfully!";
     }
 
-    // 🔥 USER ORDER HISTORY
+    // USER ORDER HISTORY
     public List<Order> getUserOrders(String userEmail) {
         return orderRepository.findByUserEmail(userEmail);
     }
 
-    // 🔥 ADMIN → ALL ORDERS
+    //ADMIN → ALL ORDERS
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
-
+    
+     // status update
     public Order updateOrderStatus(Long id, String status) {
 
     Order order = orderRepository.findById(id)

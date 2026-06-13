@@ -32,15 +32,7 @@ public class ReviewController {
             @PathVariable Long productId,
             @Valid @RequestBody ReviewDTO dto) {
 
-                System.out.println(
-    SecurityContextHolder.getContext().getAuthentication()
-);
-
-System.out.println(
-    SecurityContextHolder.getContext()
-            .getAuthentication()
-            .getName()
-);
+          
 
         String email = SecurityContextHolder
                 .getContext()
